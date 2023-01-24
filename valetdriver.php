@@ -59,8 +59,6 @@ class PrestaShopValetDriver extends ValetDriver
         }
         return false;
     }
-1536
-
 
     /**
      * Determine if the incoming request is for a static file.
@@ -183,3 +181,4 @@ class PrestaShopValetDriver extends ValetDriver
         return $sitePath . '/index.php';
     }
 }
+
