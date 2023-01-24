@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Class PrestaShopValetDriver
- * @author Paolo Falomo @user https://gitlab.com/paolofalomo
- * @source https://gitlab.com/snippets/1717590
- * @version 1.5
- */
 class PrestaShopValetDriver extends ValetDriver
 {
     public static $ps_exclusions = ['ajax.php','dialog.php','ajax_products_list.php','autoupgrade/','filemanager/'];
@@ -27,7 +21,6 @@ class PrestaShopValetDriver extends ValetDriver
         }else{
             return false;
         }
-
     }
 
     /**
