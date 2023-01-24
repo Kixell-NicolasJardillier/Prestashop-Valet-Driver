@@ -2,63 +2,71 @@
 
 class PrestaShopValetDriver extends ValetDriver
 {
-    public static $ps_exclusions = ['ajax.php','dialog.php','ajax_products_list.php','autoupgrade/','filemanager/'];
+    public static $ps_exclusions = ['ajax.php', 'dialog.php', 'ajax_products_list.php', 'autoupgrade/', 'filemanager/'];
+
     /**
      * Determine if the driver serves the request.
      *
-     * @param  string $sitePath
-     * @param  string $siteName
-     * @param  string $uri
+     * @param string $sitePath
+     * @param string $siteName
+     * @param string $uri
      *
      * @return bool
      */
     public function serves($sitePath, $siteName, $uri)
     {
-        if(self::isPrestashop($sitePath) && self::stringContains($uri,self::$ps_exclusions)){
+        if (self::isPrestashop($sitePath) && self::stringContains($uri, self::$ps_exclusions)) {
             return false;
-        }elseif(self::isPrestashop($sitePath)){
+        } elseif (self::isPrestashop($sitePath)) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
     /**
-     * Determine if is prestashop
+     * Determine if is prestashop.
+     *
      * @param $sitePath
+     *
      * @return bool
      */
-    public static function isPrestashop($sitePath){
-        return file_exists($sitePath . '/classes/PrestashopAutoload.php');
+    public static function isPrestashop($sitePath)
+    {
+        return file_exists($sitePath.'/classes/PrestashopAutoload.php');
     }
 
     /**
-     * Check if string contains a string
+     * Check if string contains a string.
+     *
      * @param $string
      * @param $doesContains
+     *
      * @return bool
      */
-    public static function stringContains($string,$doesContains=null){
-        if(is_array($doesContains)){
-            foreach ($doesContains as $doesContain){
-                if(self::stringContains($string,$doesContain)){
+    public static function stringContains($string, $doesContains = null)
+    {
+        if (is_array($doesContains)) {
+            foreach ($doesContains as $doesContain) {
+                if (self::stringContains($string, $doesContain)) {
                     return true;
                 }
             }
-        }else{
+        } else {
             if (strpos($string, $doesContains) !== false) {
                 return true;
             }
         }
+
         return false;
     }
 
     /**
      * Determine if the incoming request is for a static file.
      *
-     * @param  string $sitePath
-     * @param  string $siteName
-     * @param  string $uri
+     * @param string $sitePath
+     * @param string $siteName
+     * @param string $uri
      *
      * @return string|false
      */
@@ -124,7 +132,6 @@ class PrestaShopValetDriver extends ValetDriver
             }
         }
 
-
         // rewrite ^/([0-9])([0-9])(-[_a-zA-Z0-9-]*)?(-[0-9]+)?/.+.jpg$ /img/p/$1/$2/$1$2$3$4.jpg last;
         if (preg_match('/([0-9])([0-9])(-[_a-zA-Z0-9-]*)?(-[0-9]+)?\/.+\.(jpg|webp)/i', $uri, $matches)) {
             if (is_file($staticFilePath = "{$sitePath}/img/p/{$matches[1]}/{$matches[2]}/{$matches[1]}{$matches[2]}{$matches[3]}.jpg")) {
@@ -139,39 +146,39 @@ class PrestaShopValetDriver extends ValetDriver
             }
         }
 
-
         return false;
     }
 
     /**
      * Get the fully resolved path to the application's front controller.
      *
-     * @param  string $sitePath
-     * @param  string $siteName
-     * @param  string $uri
+     * @param string $sitePath
+     * @param string $siteName
+     * @param string $uri
      *
      * @return string
      */
     public function frontControllerPath($sitePath, $siteName, $uri)
     {
-        $parts = explode('/',$uri);
-        if(!self::stringContains($uri,self::$ps_exclusions) && is_file($sitePath.$uri) && file_exists($sitePath.$uri)){
+        $parts = explode('/', $uri);
+        if (!self::stringContains($uri, self::$ps_exclusions) && is_file($sitePath.$uri) && file_exists($sitePath.$uri)) {
             $_SERVER['SCRIPT_FILENAME'] = $sitePath.$uri;
+
             return $sitePath.$uri;
         }
-        if(isset($parts[1]) && $parts[1] !='' && file_exists($adminIdex = $sitePath . '/'. $parts[1] .'/index.php')){
-
+        if (isset($parts[1]) && $parts[1] != '' && file_exists($adminIdex = $sitePath.'/'.$parts[1].'/index.php')) {
             $_SERVER['SCRIPT_FILENAME'] = $adminIdex;
-            $_SERVER['SCRIPT_NAME'] = '/'. $parts[1] .'/index.php';
+            $_SERVER['SCRIPT_NAME'] = '/'.$parts[1].'/index.php';
 
-            if(isset($_GET['controller']) || isset($_GET['tab'])){
+            if (isset($_GET['controller']) || isset($_GET['tab'])) {
                 return $adminIdex;
             }
+
             return $adminIdex;
         }
         $_SERVER['SCRIPT_NAME'] = '/index.php';
-        $_SERVER['SCRIPT_FILENAME'] = $sitePath . '/index.php';
-        return $sitePath . '/index.php';
+        $_SERVER['SCRIPT_FILENAME'] = $sitePath.'/index.php';
+
+        return $sitePath.'/index.php';
     }
 }
-
