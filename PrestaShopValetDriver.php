@@ -1,5 +1,9 @@
 <?php
 
+namespace Valet\Drivers\Custom;
+
+use Valet\Drivers\ValetDriver;
+
 class PrestaShopValetDriver extends ValetDriver
 {
     public static $ps_exclusions = ['ajax.php', 'dialog.php', 'ajax_products_list.php', 'autoupgrade/', 'filemanager/'];
@@ -13,7 +17,7 @@ class PrestaShopValetDriver extends ValetDriver
      *
      * @return bool
      */
-    public function serves($sitePath, $siteName, $uri)
+    public function serves(string $sitePath, string $siteName, string $uri): bool
     {
         if (self::isPrestashop($sitePath) && self::stringContains($uri, self::$ps_exclusions)) {
             return false;
@@ -70,7 +74,7 @@ class PrestaShopValetDriver extends ValetDriver
      *
      * @return string|false
      */
-    public function isStaticFile($sitePath, $siteName, $uri)
+    public function isStaticFile(string $sitePath, string $siteName, string $uri)
     {
         if (is_file($staticFilePath = "{$sitePath}/{$uri}")) {
             return $staticFilePath;
@@ -158,7 +162,7 @@ class PrestaShopValetDriver extends ValetDriver
      *
      * @return string
      */
-    public function frontControllerPath($sitePath, $siteName, $uri)
+    public function frontControllerPath(string $sitePath, string $siteName, string $uri): string
     {
         $parts = explode('/', $uri);
         if (!self::stringContains($uri, self::$ps_exclusions) && is_file($sitePath.$uri) && file_exists($sitePath.$uri)) {
