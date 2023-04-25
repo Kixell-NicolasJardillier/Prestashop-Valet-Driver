@@ -37,7 +37,7 @@ class PrestaShopValetDriver extends ValetDriver
      */
     public static function isPrestashop($sitePath)
     {
-        return file_exists($sitePath.'/classes/PrestashopAutoload.php');
+        return file_exists($sitePath.'/classes/PrestaShopCollection.php');
     }
 
     /**
