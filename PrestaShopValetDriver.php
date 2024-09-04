@@ -150,7 +150,42 @@ class PrestaShopValetDriver extends ValetDriver
             }
         }
 
+        if (self::isStaticFileExtension($staticFilePath)) {
+            return $staticFilePath;
+        }
+
         return false;
+    }
+
+
+    /**
+     * Determine if the given URI represents a static file by checking its extension.
+     *
+     * @param  string  $uri  The URI to check for static file extension.
+     *
+     * @return bool True if the URI represents a static file extension, false otherwise.
+     */
+    public static function isStaticFileExtension($uri)
+    {
+        $staticExtensions = [
+            'js',
+            'js.map',
+            'css',
+            'css.map',
+            'woff',
+            'woff2',
+            'png',
+            'jpg',
+            'jpeg',
+            'gif',
+            'svg',
+            'ico',
+            'mp4',
+            'webm',
+        ];
+
+        $pattern = '/\.(' . implode('|', array_map('preg_quote', $staticExtensions)) . ')$/i';
+        return preg_match($pattern, $uri);
     }
 
     /**
