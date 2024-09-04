@@ -157,11 +157,10 @@ class PrestaShopValetDriver extends ValetDriver
         return false;
     }
 
-
     /**
      * Determine if the given URI represents a static file by checking its extension.
      *
-     * @param  string  $uri  The URI to check for static file extension.
+     * @param string $uri The URI to check for static file extension.
      *
      * @return bool True if the URI represents a static file extension, false otherwise.
      */
@@ -184,7 +183,8 @@ class PrestaShopValetDriver extends ValetDriver
             'webm',
         ];
 
-        $pattern = '/\.(' . implode('|', array_map('preg_quote', $staticExtensions)) . ')$/i';
+        $pattern = '/\.('.implode('|', array_map('preg_quote', $staticExtensions)).')$/i';
+
         return preg_match($pattern, $uri);
     }
 
